@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diabetes Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="card">
+    <h1>🩺 Diabetes Prediction</h1>
+
+    <div class="form-grid">
+        <input type="number" id="preg" placeholder="Pregnancies">
+        <input type="number" id="gluc" placeholder="Glucose">
+        <input type="number" id="bp" placeholder="Blood Pressure">
+        <input type="number" id="skin" placeholder="Skin Thickness">
+        <input type="number" id="ins" placeholder="Insulin">
+        <input type="number" id="bmi" placeholder="BMI">
+        <input type="number" id="dpf" placeholder="DPF">
+        <input type="number" id="age" placeholder="Age">
+    </div>
+
+    <button onclick="predict()">Predict</button>
+
+    <div id="result"></div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
