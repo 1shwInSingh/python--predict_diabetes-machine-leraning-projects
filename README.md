@@ -1,7 +1,9 @@
-Diabetes Prediction - Machine Learning Projects (Python)
+Diabetes Prediction - Machine Learning Projects (Python):
+
 This repository contains a machine learning project for predicting diabetes using health and diagnostic data. The goal is to build, evaluate, and document predictive models that reveal risk patterns and ensure reproducible analysis workflows.
 
-Overview
+Overview:
+
 Builds a complete modeling pipeline in Python, including data preprocessing, feature engineering, model training, evaluation, and comparison across candidate models.
 Conducts exploratory data analysis (EDA) to examine feature distributions, correlations, class imbalance, and potential leakage or data quality issues.
 Evaluates models using relevant metrics (accuracy, precision, recall, F1 score, ROC–AUC) plus visual diagnostics such as ROC curves, confusion matrices, precision–recall curves, and feature importance summaries.
