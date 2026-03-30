@@ -21,22 +21,22 @@ st.write("### Enter health details:")
 
 # ---- INPUTS ---- #
 
-# binary inputs (0 or 1)
-HighBP = st.selectbox("High Blood Pressure", [0, 1])
-HighChol = st.selectbox("High Cholesterol", [0, 1])
-CholCheck = st.selectbox("Cholesterol Check", [0, 1])
-Smoker = st.selectbox("Smoker", [0, 1])
-Stroke = st.selectbox("Stroke", [0, 1])
-HeartDiseaseorAttack = st.selectbox("Heart Disease", [0, 1])
-PhysActivity = st.selectbox("Physical Activity", [0, 1])
-Fruits = st.selectbox("Fruits Intake", [0, 1])
-Veggies = st.selectbox("Veggies Intake", [0, 1])
-HvyAlcoholConsump = st.selectbox("Heavy Alcohol Consumption", [0, 1])
-AnyHealthcare = st.selectbox("Healthcare Access", [0, 1])
-NoDocbcCost = st.selectbox("No Doctor (Cost Issue)", [0, 1])
-DiffWalk = st.selectbox("Difficulty Walking", [0, 1])
-Sex = st.selectbox("Sex (0 = Female, 1 = Male)", [0, 1])
-
+# binary inputs using checkbox
+HighBP = 1 if st.checkbox("High Blood Pressure") else 0
+HighChol = 1 if st.checkbox("High Cholesterol") else 0
+CholCheck = 1 if st.checkbox("Had Cholesterol Check") else 0
+Smoker = 1 if st.checkbox("Smoker") else 0
+Stroke = 1 if st.checkbox("Had Stroke") else 0
+HeartDiseaseorAttack = 1 if st.checkbox("Heart Disease / Attack") else 0
+PhysActivity = 1 if st.checkbox("Physically Active") else 0
+Fruits = 1 if st.checkbox("Eats Fruits Regularly") else 0
+Veggies = 1 if st.checkbox("Eats Vegetables Regularly") else 0
+HvyAlcoholConsump = 1 if st.checkbox("Heavy Alcohol Consumption") else 0
+AnyHealthcare = 1 if st.checkbox("Has Healthcare Access") else 0
+NoDocbcCost = 1 if st.checkbox("Couldn't See Doctor Due to Cost") else 0
+DiffWalk = 1 if st.checkbox("Difficulty Walking") else 0
+gender = st.selectbox("Gender", ["Female", "Male"])
+Sex = 1 if gender == "Male" else 0
 # numeric inputs
 BMI = st.number_input("BMI", min_value=0.0)
 GenHlth = st.slider("General Health (1 = Best, 5 = Worst)", 1, 5)
