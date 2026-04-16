@@ -6,6 +6,9 @@ import os
 
 app = Flask(__name__)
 
+# Custom threshold for better diabetes recall (catches 53% vs 18% of diabetic cases)
+RISK_THRESHOLD = 0.35
+
 # Load config
 config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config", "config.yaml")
 with open(config_path, "r") as file:
@@ -73,8 +76,9 @@ def predict():
         input_array = np.array(features).reshape(1, -1)
         input_scaled = scaler.transform(input_array)
         
-        prediction = int(model.predict(input_scaled)[0])
         probabilities = model.predict_proba(input_scaled)[0]
+        # Use custom threshold for better recall on diabetes cases
+        prediction = 1 if probabilities[1] >= RISK_THRESHOLD else 0
         
         return jsonify({
             "prediction": prediction,

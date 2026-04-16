@@ -24,8 +24,8 @@ def train_model(df):
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    # Handle class imbalance with SMOTE — oversample to 70% of majority class
-    smote = SMOTE(random_state=42, sampling_strategy=0.7)
+    # Handle class imbalance with SMOTE — fully balanced classes
+    smote = SMOTE(random_state=42, sampling_strategy=1.0)
     X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_train)
 
     print(f"Training samples after SMOTE: {len(X_train_resampled)}")
@@ -33,11 +33,11 @@ def train_model(df):
     # Gradient Boosting Classifier with tuned hyperparameters
     model = GradientBoostingClassifier(
         n_estimators=300,
-        learning_rate=0.08,
-        max_depth=6,
-        min_samples_split=40,
-        min_samples_leaf=15,
-        subsample=0.85,
+        learning_rate=0.1,
+        max_depth=5,
+        min_samples_split=50,
+        min_samples_leaf=20,
+        subsample=0.8,
         max_features='sqrt',
         random_state=42,
         verbose=1
