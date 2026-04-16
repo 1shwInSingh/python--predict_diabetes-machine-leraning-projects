@@ -1,0 +1,2 @@
+data_path: data/raw/diabetes.csv
+model_path: models/model.pkl
