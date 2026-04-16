@@ -7,3 +7,4 @@ flask
 joblib
 pyyaml
 imbalanced-learn
+scipy
