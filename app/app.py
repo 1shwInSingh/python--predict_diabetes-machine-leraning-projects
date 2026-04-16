@@ -1,10 +1,20 @@
+import sys
+import os
+
+# Ensure project root is on sys.path so `src` package is always importable,
+# whether the app is launched from project root or from the app/ folder.
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+
 from flask import Flask, render_template, request, jsonify
 import joblib
 import yaml
 import numpy as np
-import os
+import pandas as pd
 
 from src.predict import build_engineered_features
+from src.data_preprocessing import FEATURE_COLUMNS
 
 app = Flask(__name__, template_folder="templates")
 
@@ -53,8 +63,9 @@ def predict():
         # Build full 29-feature vector (21 raw + 8 engineered) using shared helper
         features = build_engineered_features(data)
 
-        input_array   = np.array(features).reshape(1, -1)
-        probabilities = pipeline.predict_proba(input_array)[0]
+        # Named DataFrame — matches training column names exactly (no sklearn warnings)
+        input_df      = pd.DataFrame([features], columns=FEATURE_COLUMNS)
+        probabilities = pipeline.predict_proba(input_df)[0]
 
         prediction = int(probabilities[1] >= RISK_THRESHOLD)
 

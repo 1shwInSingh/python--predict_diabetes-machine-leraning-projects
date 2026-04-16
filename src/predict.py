@@ -1,6 +1,9 @@
 import joblib
 import numpy as np
+import pandas as pd
 import os
+
+from src.data_preprocessing import FEATURE_COLUMNS
 
 # Fallback threshold if threshold.pkl is not found
 DEFAULT_THRESHOLD = 0.40
@@ -92,8 +95,9 @@ def predict(model_or_pipeline, scaler_or_threshold, input_data):
         pipeline  = model_or_pipeline
         threshold = DEFAULT_THRESHOLD
 
-    input_array = np.array(input_data).reshape(1, -1)
-    probabilities = pipeline.predict_proba(input_array)[0]
+    # Wrap in DataFrame so pipeline receives named columns (no sklearn warning)
+    input_df = pd.DataFrame([input_data], columns=FEATURE_COLUMNS)
+    probabilities = pipeline.predict_proba(input_df)[0]
     prediction = 1 if probabilities[1] >= threshold else 0
 
     return {
