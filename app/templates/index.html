@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiabetesAI - Intelligent Diabetes Risk Predictor</title>
+    <meta name="description" content="AI-powered diabetes risk prediction tool using machine learning. Get instant health risk assessment based on your health indicators.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --bg-glass: rgba(255, 255, 255, 0.04);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --gradient-primary: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .bg-orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -7s;
+        }
+
+        .bg-orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.2), transparent);
+            top: 40%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* Layout */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            padding: 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .header-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.9); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 20px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent-blue);
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Main form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding: 40px 0;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .card-icon.blue { background: rgba(59, 130, 246, 0.15); }
+        .card-icon.purple { background: rgba(139, 92, 246, 0.15); }
+        .card-icon.cyan { background: rgba(6, 182, 212, 0.15); }
+        .card-icon.green { background: rgba(16, 185, 129, 0.15); }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--bg-glass);
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--border-glass);
+        }
+
+        .toggle-item.active {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            user-select: none;
+        }
+
+        .toggle-item.active .toggle-label {
+            color: var(--text-primary);
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            position: relative;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .toggle-item.active .toggle-switch {
+            background: var(--accent-blue);
+        }
+
+        .toggle-item.active .toggle-switch::after {
+            transform: translateX(20px);
+            background: white;
+        }
+
+        /* Select + Input */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .styled-select, .styled-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+            appearance: none;
+        }
+
+        .styled-select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 4L6 8L10 4' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .styled-select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .styled-input:focus, .styled-select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Slider */
+        .slider-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 2px 10px;
+            border-radius: 100px;
+        }
+
+        .styled-range {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            outline: none;
+        }
+
+        .styled-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .styled-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Predict Button */
+        .predict-section {
+            padding: 0 0 40px;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .predict-btn {
+            width: 100%;
+            padding: 18px 32px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-lg);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+
+        .predict-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.5s;
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .predict-btn:hover::before {
+            left: 100%;
+        }
+
+        .predict-btn:active {
+            transform: translateY(0);
+        }
+
+        .predict-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .predict-btn .btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results */
+        .result-container {
+            margin-top: 32px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            text-align: center;
+        }
+
+        .result-card.risk-high {
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 50px rgba(239, 68, 68, 0.1);
+        }
+
+        .result-card.risk-low {
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 50px rgba(16, 185, 129, 0.1);
+        }
+
+        .result-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+        }
+
+        .risk-high .result-icon {
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .risk-low .result-icon {
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .risk-high .result-title { color: var(--accent-red); }
+        .risk-low .result-title { color: var(--accent-green); }
+
+        .result-description {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Gauge */
+        .gauge-container {
+            width: 200px;
+            height: 110px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.06);
+            stroke-width: 14;
+        }
+
+        .gauge-fill {
+            fill: none;
+            stroke-width: 14;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease-out, stroke 0.5s ease;
+        }
+
+        .gauge-text {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .gauge-percentage {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .gauge-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Probability bars */
+        .prob-bars {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .prob-bar {
+            flex: 1;
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            padding: 16px;
+        }
+
+        .prob-bar-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .prob-bar-value {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .prob-bar-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .prob-bar-fill {
+            height: 100%;
+            border-radius: 100px;
+            transition: width 1.2s ease-out;
+        }
+
+        .prob-bar-fill.green { background: var(--accent-green); }
+        .prob-bar-fill.red { background: var(--accent-red); }
+
+        /* Disclaimer */
+        .disclaimer {
+            text-align: center;
+            padding: 24px 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border-glass);
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+            font-size: 13px;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Full-width card span */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .hero {
+                padding: 40px 0 24px;
+            }
+            .card {
+                padding: 20px;
+            }
+            .prob-bars {
+                flex-direction: column;
+            }
+            .result-card {
+                padding: 24px;
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🩺</div>
+                <span class="logo-text">DiabetesAI</span>
+            </div>
+            <div class="header-badge">
+                <span class="dot"></span>
+                ML Model Active
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-label">
+                ✨ Powered by Machine Learning
+            </div>
+            <h1>Intelligent <span class="gradient-text">Diabetes Risk</span> Predictor</h1>
+            <p>Get an instant AI-powered assessment of your diabetes risk based on key health indicators. Enter your information below for a personalized analysis.</p>
+        </section>
+
+        <!-- Form -->
+        <div class="form-grid">
+            <!-- Medical History -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon blue">💊</div>
+                    <div>
+                        <div class="card-title">Medical History</div>
+                        <div class="card-subtitle">Pre-existing conditions</div>
+                    </div>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-item" data-field="HighBP" onclick="toggleSwitch(this)" id="toggle-highbp">
+                        <span class="toggle-label">High Blood Pressure</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="HighChol" onclick="toggleSwitch(this)" id="toggle-highchol">
+                        <span class="toggle-label">High Cholesterol</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="CholCheck" onclick="toggleSwitch(this)" id="toggle-cholcheck">
+                        <span class="toggle-label">Cholesterol Check (past 5 yrs)</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="Stroke" onclick="toggleSwitch(this)" id="toggle-stroke">
+                        <span class="toggle-label">History of Stroke</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="HeartDiseaseorAttack" onclick="toggleSwitch(this)" id="toggle-heart">
+                        <span class="toggle-label">Heart Disease / Attack</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lifestyle -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon green">🏃</div>
+                    <div>
+                        <div class="card-title">Lifestyle</div>
+                        <div class="card-subtitle">Daily habits & activities</div>
+                    </div>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-item" data-field="Smoker" onclick="toggleSwitch(this)" id="toggle-smoker">
+                        <span class="toggle-label">Smoker</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="PhysActivity" onclick="toggleSwitch(this)" id="toggle-physactivity">
+                        <span class="toggle-label">Physically Active</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="Fruits" onclick="toggleSwitch(this)" id="toggle-fruits">
+                        <span class="toggle-label">Eats Fruits Regularly</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="Veggies" onclick="toggleSwitch(this)" id="toggle-veggies">
+                        <span class="toggle-label">Eats Vegetables Regularly</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="HvyAlcoholConsump" onclick="toggleSwitch(this)" id="toggle-alcohol">
+                        <span class="toggle-label">Heavy Alcohol Consumption</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Healthcare Access -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon purple">🏥</div>
+                    <div>
+                        <div class="card-title">Healthcare Access</div>
+                        <div class="card-subtitle">Insurance & mobility</div>
+                    </div>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-item" data-field="AnyHealthcare" onclick="toggleSwitch(this)" id="toggle-healthcare">
+                        <span class="toggle-label">Has Healthcare Coverage</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="NoDocbcCost" onclick="toggleSwitch(this)" id="toggle-nodoc">
+                        <span class="toggle-label">Couldn't See Doctor (Cost)</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" data-field="DiffWalk" onclick="toggleSwitch(this)" id="toggle-diffwalk">
+                        <span class="toggle-label">Difficulty Walking / Climbing</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demographics & Body -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon cyan">📊</div>
+                    <div>
+                        <div class="card-title">Demographics & Body</div>
+                        <div class="card-subtitle">Personal information</div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <label class="input-label" for="gender-select">Gender</label>
+                        <select class="styled-select" id="gender-select">
+                            <option value="0">Female</option>
+                            <option value="1">Male</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label" for="age-select">Age Group</label>
+                        <select class="styled-select" id="age-select">
+                            <option value="1">18 - 24</option>
+                            <option value="2">25 - 29</option>
+                            <option value="3">30 - 34</option>
+                            <option value="4">35 - 39</option>
+                            <option value="5" selected>40 - 44</option>
+                            <option value="6">45 - 49</option>
+                            <option value="7">50 - 54</option>
+                            <option value="8">55 - 59</option>
+                            <option value="9">60 - 64</option>
+                            <option value="10">65 - 69</option>
+                            <option value="11">70 - 74</option>
+                            <option value="12">75 - 79</option>
+                            <option value="13">80+</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label" for="bmi-input">BMI (Body Mass Index)</label>
+                        <input type="number" class="styled-input" id="bmi-input" value="25" min="10" max="100" step="0.1" placeholder="Enter your BMI">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label" for="education-select">Education Level</label>
+                        <select class="styled-select" id="education-select">
+                            <option value="1">Never Attended</option>
+                            <option value="2">Elementary</option>
+                            <option value="3">Some High School</option>
+                            <option value="4" selected>High School Graduate</option>
+                            <option value="5">Some College</option>
+                            <option value="6">College Graduate</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label" for="income-select">Annual Income</label>
+                        <select class="styled-select" id="income-select">
+                            <option value="1">Less than $10,000</option>
+                            <option value="2">$10,000 - $15,000</option>
+                            <option value="3">$15,000 - $20,000</option>
+                            <option value="4">$20,000 - $25,000</option>
+                            <option value="5" selected>$25,000 - $35,000</option>
+                            <option value="6">$35,000 - $50,000</option>
+                            <option value="7">$50,000 - $75,000</option>
+                            <option value="8">$75,000 or more</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Status (Full Width) -->
+            <div class="card full-width">
+                <div class="card-header">
+                    <div class="card-icon blue">❤️</div>
+                    <div>
+                        <div class="card-title">Health Status</div>
+                        <div class="card-subtitle">Current health assessment</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;">
+                    <div class="slider-wrapper">
+                        <div class="slider-header">
+                            <span class="input-label">General Health</span>
+                            <span class="slider-value" id="genhlth-value">3</span>
+                        </div>
+                        <input type="range" class="styled-range" id="genhlth-slider" min="1" max="5" value="3" oninput="updateSlider('genhlth')">
+                        <div class="slider-labels">
+                            <span>Excellent</span>
+                            <span>Poor</span>
+                        </div>
+                    </div>
+                    <div class="slider-wrapper">
+                        <div class="slider-header">
+                            <span class="input-label">Mental Health (bad days/month)</span>
+                            <span class="slider-value" id="menthlth-value">0</span>
+                        </div>
+                        <input type="range" class="styled-range" id="menthlth-slider" min="0" max="30" value="0" oninput="updateSlider('menthlth')">
+                        <div class="slider-labels">
+                            <span>0 days</span>
+                            <span>30 days</span>
+                        </div>
+                    </div>
+                    <div class="slider-wrapper">
+                        <div class="slider-header">
+                            <span class="input-label">Physical Health (bad days/month)</span>
+                            <span class="slider-value" id="physhlth-value">0</span>
+                        </div>
+                        <input type="range" class="styled-range" id="physhlth-slider" min="0" max="30" value="0" oninput="updateSlider('physhlth')">
+                        <div class="slider-labels">
+                            <span>0 days</span>
+                            <span>30 days</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Predict Button -->
+        <div class="predict-section">
+            <button class="predict-btn" id="predict-btn" onclick="submitPrediction()">
+                <span class="btn-content" id="btn-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    Analyze Risk
+                </span>
+            </button>
+
+            <!-- Results -->
+            <div class="result-container hidden" id="result-container">
+                <div class="result-card" id="result-card">
+                    <div class="result-icon" id="result-icon"></div>
+                    <div class="result-title" id="result-title"></div>
+                    <div class="result-description" id="result-description"></div>
+                    
+                    <!-- Gauge -->
+                    <div class="gauge-container">
+                        <svg viewBox="0 0 200 110" width="200" height="110">
+                            <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" />
+                            <path class="gauge-fill" id="gauge-fill" d="M 20 100 A 80 80 0 0 1 180 100" />
+                        </svg>
+                        <div class="gauge-text">
+                            <div class="gauge-percentage" id="gauge-percentage">0%</div>
+                            <div class="gauge-label">Risk Score</div>
+                        </div>
+                    </div>
+
+                    <!-- Probability bars -->
+                    <div class="prob-bars">
+                        <div class="prob-bar">
+                            <div class="prob-bar-label">No Diabetes Probability</div>
+                            <div class="prob-bar-value" id="prob-safe" style="color: var(--accent-green);">0%</div>
+                            <div class="prob-bar-track">
+                                <div class="prob-bar-fill green" id="prob-safe-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="prob-bar">
+                            <div class="prob-bar-label">Diabetes Risk Probability</div>
+                            <div class="prob-bar-value" id="prob-risk" style="color: var(--accent-red);">0%</div>
+                            <div class="prob-bar-track">
+                                <div class="prob-bar-fill red" id="prob-risk-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="disclaimer">
+                        <strong>Disclaimer:</strong> This is an AI-based screening tool and should not replace professional medical advice. Please consult your healthcare provider for a proper diagnosis.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>DiabetesAI &mdash; Built with Machine Learning &amp; Flask &bull; Model: Gradient Boosting Classifier</p>
+        </footer>
+    </div>
+
+    <script>
+        // Toggle switch logic
+        const toggleStates = {};
+
+        function toggleSwitch(el) {
+            const field = el.dataset.field;
+            el.classList.toggle('active');
+            toggleStates[field] = el.classList.contains('active') ? 1 : 0;
+        }
+
+        // Slider update
+        function updateSlider(name) {
+            const slider = document.getElementById(name + '-slider');
+            const valueEl = document.getElementById(name + '-value');
+            valueEl.textContent = slider.value;
+        }
+
+        // Collect form data
+        function collectFormData() {
+            return {
+                HighBP: toggleStates['HighBP'] || 0,
+                HighChol: toggleStates['HighChol'] || 0,
+                CholCheck: toggleStates['CholCheck'] || 0,
+                BMI: parseFloat(document.getElementById('bmi-input').value) || 25,
+                Smoker: toggleStates['Smoker'] || 0,
+                Stroke: toggleStates['Stroke'] || 0,
+                HeartDiseaseorAttack: toggleStates['HeartDiseaseorAttack'] || 0,
+                PhysActivity: toggleStates['PhysActivity'] || 0,
+                Fruits: toggleStates['Fruits'] || 0,
+                Veggies: toggleStates['Veggies'] || 0,
+                HvyAlcoholConsump: toggleStates['HvyAlcoholConsump'] || 0,
+                AnyHealthcare: toggleStates['AnyHealthcare'] || 0,
+                NoDocbcCost: toggleStates['NoDocbcCost'] || 0,
+                GenHlth: parseInt(document.getElementById('genhlth-slider').value),
+                MentHlth: parseInt(document.getElementById('menthlth-slider').value),
+                PhysHlth: parseInt(document.getElementById('physhlth-slider').value),
+                DiffWalk: toggleStates['DiffWalk'] || 0,
+                Sex: parseInt(document.getElementById('gender-select').value),
+                Age: parseInt(document.getElementById('age-select').value),
+                Education: parseInt(document.getElementById('education-select').value),
+                Income: parseInt(document.getElementById('income-select').value),
+            };
+        }
+
+        // Submit prediction
+        async function submitPrediction() {
+            const btn = document.getElementById('predict-btn');
+            const btnContent = document.getElementById('btn-content');
+            
+            // Loading state
+            btn.disabled = true;
+            btnContent.innerHTML = '<div class="spinner"></div> Analyzing...';
+
+            try {
+                const data = collectFormData();
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    alert('Error: ' + result.error);
+                    return;
+                }
+
+                showResults(result);
+            } catch (error) {
+                alert('Connection error. Make sure the server is running.');
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btnContent.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    Analyze Risk
+                `;
+            }
+        }
+
+        // Display results
+        function showResults(result) {
+            const container = document.getElementById('result-container');
+            const card = document.getElementById('result-card');
+            const icon = document.getElementById('result-icon');
+            const title = document.getElementById('result-title');
+            const desc = document.getElementById('result-description');
+            const gaugePercentage = document.getElementById('gauge-percentage');
+            const gaugeFill = document.getElementById('gauge-fill');
+
+            // Remove hidden
+            container.classList.remove('hidden');
+
+            // Scroll to results
+            setTimeout(() => {
+                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+
+            const isHighRisk = result.prediction === 1;
+            const riskPercent = result.probability_diabetes;
+
+            // Update card style
+            card.className = 'result-card ' + (isHighRisk ? 'risk-high' : 'risk-low');
+
+            // Icon
+            icon.textContent = isHighRisk ? '⚠️' : '✅';
+
+            // Title
+            title.textContent = isHighRisk ? 'Elevated Diabetes Risk Detected' : 'Low Diabetes Risk';
+
+            // Description
+            desc.textContent = isHighRisk
+                ? 'Based on the health indicators provided, the AI model has identified an elevated risk of diabetes or pre-diabetes. We strongly recommend consulting with a healthcare professional for further evaluation.'
+                : 'Based on the health indicators provided, the AI model suggests a low probability of diabetes. Continue maintaining a healthy lifestyle and schedule regular check-ups.';
+
+            // Gauge animation
+            const arcLength = 251.2; // approximate arc length for the SVG path
+            const offset = arcLength * (1 - riskPercent / 100);
+            gaugeFill.style.strokeDasharray = arcLength;
+            gaugeFill.style.strokeDashoffset = arcLength;
+            gaugeFill.style.stroke = isHighRisk ? 'var(--accent-red)' : 'var(--accent-green)';
+
+            // If medium risk, use amber
+            if (riskPercent >= 30 && riskPercent < 50) {
+                gaugeFill.style.stroke = 'var(--accent-amber)';
+            }
+
+            setTimeout(() => {
+                gaugeFill.style.strokeDashoffset = offset;
+            }, 100);
+
+            // Animate percentage counter
+            animateCounter(gaugePercentage, riskPercent);
+
+            // Probability bars
+            document.getElementById('prob-safe').textContent = result.probability_no_diabetes + '%';
+            document.getElementById('prob-risk').textContent = result.probability_diabetes + '%';
+            
+            setTimeout(() => {
+                document.getElementById('prob-safe-bar').style.width = result.probability_no_diabetes + '%';
+                document.getElementById('prob-risk-bar').style.width = result.probability_diabetes + '%';
+            }, 200);
+        }
+
+        // Counter animation
+        function animateCounter(el, target) {
+            let current = 0;
+            const duration = 1500;
+            const step = target / (duration / 16);
+            
+            function update() {
+                current += step;
+                if (current >= target) {
+                    el.textContent = target + '%';
+                    return;
+                }
+                el.textContent = Math.round(current) + '%';
+                requestAnimationFrame(update);
+            }
+            update();
+        }
+    </script>
+</body>
+</html>
