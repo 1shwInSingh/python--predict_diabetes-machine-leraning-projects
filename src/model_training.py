@@ -94,7 +94,7 @@ def train_model(df):
 
     # --- Find optimal threshold on held-out test set ---
     probabilities = pipeline.predict_proba(X_test)[:, 1]
-    optimal_threshold = find_optimal_threshold(y_test, probabilities)
-    print(f"Optimal classification threshold (F1-maximised): {optimal_threshold:.2f}")
+    optimal_threshold = find_optimal_threshold(y_test, probabilities, target_recall=0.88)
+    print(f"Optimal classification threshold (Max Sensitivity Target Recall ~88%): {optimal_threshold:.2f}")
 
     return pipeline, X_test, X_test, y_test, optimal_threshold

@@ -9,17 +9,19 @@ from sklearn.metrics import (
 )
 
 
-def find_optimal_threshold(y_true, probabilities):
+def find_optimal_threshold(y_true, probabilities, target_recall=0.88):
     """
-    Find the probability threshold that maximises F1 for the positive (diabetic) class.
-    Searches 0.20 – 0.65 in steps of 0.01.
+    Find the probability threshold that achieves the target recall for the 
+    positive class (diabetes), prioritizing sensitivity (catching cases).
+    Searches 0.05 – 0.50 in steps of 0.01.
     """
-    best_thresh, best_f1 = 0.5, 0.0
-    for t in np.arange(0.20, 0.65, 0.01):
+    from sklearn.metrics import recall_score
+    best_thresh = 0.5
+    for t in np.arange(0.05, 0.51, 0.01):
         preds = (probabilities >= t).astype(int)
-        f1 = f1_score(y_true, preds, pos_label=1, zero_division=0)
-        if f1 > best_f1:
-            best_f1, best_thresh = f1, t
+        recall = recall_score(y_true, preds, pos_label=1, zero_division=0)
+        if recall >= target_recall:
+            best_thresh = t
     return round(float(best_thresh), 2)
 
 
